@@ -1,8 +1,8 @@
 package com.example.snake;
 
-import org.tinylog.Logger;
+import com.example.snake.ctrl.TextualController;
 
-import com.example.snake.view.Textual;
+import org.tinylog.Logger;
 
 public class MainText {
     private static final int DEFAULT_N_ROWS = 10;
@@ -10,6 +10,8 @@ public class MainText {
 
     public static void main(String[] args) {
         Logger.trace("Enter");
-        new Textual(DEFAULT_N_ROWS, DEFAULT_N_COLS);
+        TextualController controller = new TextualController(DEFAULT_N_ROWS, DEFAULT_N_COLS);
+        controller.go();
+        Logger.trace("Done");
     }
 }
