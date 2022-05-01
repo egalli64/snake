@@ -9,7 +9,7 @@ public class TextualController {
 
     public TextualController(int nRows, int nCols) {
         this.data = new Data(nRows, nCols);
-        this.view = new TextualView();
+        this.view = new TextualView(this);
 
         System.out.println(data);
     }

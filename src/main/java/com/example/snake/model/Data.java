@@ -1,6 +1,7 @@
 package com.example.snake.model;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,14 +19,21 @@ public class Data {
         this.availables = new HashSet<Position>(N_ROWS * N_COLS);
 
         for (int i = 0; i < N_ROWS; i++) {
-            for (int j = 0; j < N_ROWS; j++) {
+            for (int j = 0; j < N_COLS; j++) {
                 availables.add(new Position(i, j));
             }
         }
 
+        // random direction
         Direction[] directions = Direction.values();
         Direction direction = directions[ThreadLocalRandom.current().nextInt(directions.length)];
-        Position head = availables.iterator().next();
+
+        // random head
+        Iterator<Position> it = availables.iterator();
+        for(int i = 0, chosen = ThreadLocalRandom.current().nextInt(N_ROWS * N_COLS - 1); i < chosen; i++) {
+            it.next();
+        }
+        Position head = it.next();
         availables.remove(head);
 
         this.snake = new Snake(head, direction);

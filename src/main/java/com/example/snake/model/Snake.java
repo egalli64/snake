@@ -9,6 +9,7 @@ public class Snake {
 
     public Snake(Position head, Direction direction) {
         this.body = new ArrayDeque<Position>(0);
+        this.body.add(head);
         this.direction = direction;
     }
 
