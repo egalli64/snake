@@ -13,10 +13,10 @@ public class Data {
     private Snake snake;
 
     public Data(int n_rows, int n_cols) {
-        this.N_ROWS = n_rows;
-        this.N_COLS = n_cols;
+        N_ROWS = n_rows;
+        N_COLS = n_cols;
 
-        this.availables = new HashSet<Position>(N_ROWS * N_COLS);
+        availables = new HashSet<Position>(N_ROWS * N_COLS);
 
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_COLS; j++) {
@@ -30,13 +30,27 @@ public class Data {
 
         // random head
         Iterator<Position> it = availables.iterator();
-        for(int i = 0, chosen = ThreadLocalRandom.current().nextInt(N_ROWS * N_COLS - 1); i < chosen; i++) {
+        for (int i = 0, j = ThreadLocalRandom.current().nextInt(N_ROWS * N_COLS - 1); i < j; i++) {
             it.next();
         }
         Position head = it.next();
         availables.remove(head);
 
-        this.snake = new Snake(head, direction);
+        snake = new Snake(head, direction, Math.min(N_COLS, N_ROWS) / 2);
+        while (snake.hasToGrow()) {
+            int i = head.i();
+            int j = head.j();
+            switch (direction) {
+                case LEFT -> j = j == 0 ? N_COLS - 1 : j - 1;
+                case RIGHT -> j = j == N_COLS - 1 ? 0 : j + 1;
+                case UP -> i = i == 0 ? N_ROWS - 1 : i - 1;
+                case DOWN -> i = i == N_ROWS - 1 ? 0 : i + 1;
+            }
+
+            head = new Position(i, j);
+            availables.remove(head);
+            this.snake.grow(head);
+        }
     }
 
     @Override
