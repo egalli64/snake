@@ -6,20 +6,21 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * The snake lives on this board
+ */
 public class Board {
-    private final int N_ROWS;
-    private final int N_COLS;
+    private final int size;
 
     private Set<Position> positions;
 
-    public Board(int n_rows, int n_cols) {
-        N_ROWS = n_rows;
-        N_COLS = n_cols;
+    public Board(int size) {
+        this.size = size;
 
-        positions = new HashSet<>(N_ROWS * N_COLS);
+        positions = new HashSet<>(size * size);
 
-        for (int i = 0; i < N_ROWS; i++) {
-            for (int j = 0; j < N_COLS; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 positions.add(new Position(i, j));
             }
         }
@@ -30,6 +31,11 @@ public class Board {
         return "Board{positions=" + positions + '}';
     }
 
+    /**
+     * Remove a random position among the available ones and return it
+     *
+     * @return a not yet used random position in the board
+     */
     public Position pop() {
         Iterator<Position> it = positions.iterator();
         for (int i = 0, j = ThreadLocalRandom.current().nextInt(positions.size() - 1); i < j; i++) {
@@ -41,14 +47,21 @@ public class Board {
         return result;
     }
 
+    /**
+     * Remove the specified position from the available ones and return it
+     *
+     * @param position a position
+     * @param direction where to get the result from the passed position
+     * @return a good position or empty
+     */
     public Optional<Position> pop(Position position, Direction direction) {
         int i = position.i();
         int j = position.j();
         switch (direction) {
-            case LEFT -> j = j == 0 ? N_COLS - 1 : j - 1;
-            case RIGHT -> j = j == N_COLS - 1 ? 0 : j + 1;
-            case UP -> i = i == 0 ? N_ROWS - 1 : i - 1;
-            case DOWN -> i = i == N_ROWS - 1 ? 0 : i + 1;
+            case LEFT -> j = j == 0 ? size - 1 : j - 1;
+            case RIGHT -> j = j == size - 1 ? 0 : j + 1;
+            case UP -> i = i == 0 ? size - 1 : i - 1;
+            case DOWN -> i = i == size - 1 ? 0 : i + 1;
         }
 
         Position result = new Position(i, j);

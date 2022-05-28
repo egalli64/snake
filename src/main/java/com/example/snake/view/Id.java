@@ -1,13 +1,16 @@
-package com.example.snake.model;
+package com.example.snake.view;
 
 import java.awt.Color;
 
+/**
+ * Cell representation
+ */
 public enum Id {
     EMPTY(Color.DARK_GRAY), FOOD(Color.GREEN), BODY(Color.WHITE), HEAD(Color.YELLOW);
 
     private final Color color;
 
-    private Id(Color color) {
+    Id(Color color) {
         this.color = color;
     }
 

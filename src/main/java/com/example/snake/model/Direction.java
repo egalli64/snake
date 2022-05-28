@@ -2,9 +2,19 @@ package com.example.snake.model;
 
 import com.example.snake.ctrl.Command;
 
+/**
+ * The selectable directions
+ */
 public enum Direction {
     UP, LEFT, DOWN, RIGHT;
 
+    /**
+     * Convert a command to a direction, if possible
+     *
+     * @param command the user command
+     * @return the associated direction
+     * @throws IllegalStateException if command is not a direction
+     */
     public static Direction from(Command command) {
         return switch (command) {
             case UP -> UP;
@@ -15,6 +25,12 @@ public enum Direction {
         };
     }
 
+    /**
+     * Compare the current direction with other
+     *
+     * @param other a direction
+     * @return false is same orientation, opposite sense
+     */
     public boolean isOpposite(Direction other) {
         return switch (other) {
             case UP -> this.equals(DOWN);
