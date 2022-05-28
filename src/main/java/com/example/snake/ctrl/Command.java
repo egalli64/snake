@@ -1,4 +1,4 @@
-package com.example.snake.view;
+package com.example.snake.ctrl;
 
 public enum Command {
     UP, LEFT, DOWN, RIGHT, SAME, EXIT;
