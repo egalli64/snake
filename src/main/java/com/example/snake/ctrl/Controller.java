@@ -63,9 +63,11 @@ public class Controller {
         Optional<Position> next = board.pop(head, direction);
         if (next.isEmpty()) {
             return false;
+        } else {
+            snake.move(next.get());
         }
 
-        Logger.warn("TBD");
+        Logger.trace(snake);
         return true;
     }
 

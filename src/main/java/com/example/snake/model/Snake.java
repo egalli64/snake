@@ -8,12 +8,12 @@ import java.util.concurrent.ThreadLocalRandom;
  * The game main character
  */
 public class Snake {
-    private Deque<Position> body;
+    private final Deque<Position> body;
     private Direction direction;
-    private int size;
+    private final int size;
 
     public Snake(Position head, int size) {
-        this.body = new ArrayDeque<Position>(0);
+        this.body = new ArrayDeque<>(0);
         this.body.add(head);
 
         // random direction
@@ -70,6 +70,11 @@ public class Snake {
         }
 
         return this.direction;
+    }
+
+    public Position move(Position head) {
+        grow(head);
+        return body.removeLast();
     }
 
     @Override
