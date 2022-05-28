@@ -1,23 +1,48 @@
 package com.example.snake.ctrl;
 
 import com.example.snake.model.Board;
+import com.example.snake.model.Direction;
+import com.example.snake.model.Position;
+import com.example.snake.model.Snake;
 import com.example.snake.view.TextualView;
 import org.tinylog.Logger;
 
+import java.util.Optional;
+
 public class TextualController {
-    Board board;
     TextualView view;
+    Board board;
+    Snake snake;
 
     public TextualController(int nRows, int nCols) {
-        this.board = new Board(nRows, nCols);
         this.view = new TextualView(this);
+        this.board = new Board(nRows, nCols);
 
-        System.out.println(board);
+        Position head = board.pop();
+        snake = new Snake(head, Math.min(nCols, nCols) / 2);
+
+        while (snake.hasToGrow()) {
+            Optional<Position> next = board.pop(head, snake.getDirection());
+            if (next.isPresent()) {
+                head = next.get();
+                snake.grow(head);
+            } else {
+                Logger.error("Can't move " + snake);
+            }
+        }
+
+        Logger.trace(snake);
     }
 
     public boolean execute(Command command) {
-        Logger.trace(command);
-        return command == Command.EXIT ? false : board.nextStep(command);
+        Logger.trace("Command: " + command);
+        if (command == Command.EXIT) {
+            return false;
+        }
+
+        Direction direction = command == Command.SAME ? snake.getDirection() : snake.towards(Direction.from(command));
+        Logger.trace("Direction: " + direction);
+        return true;
     }
 
     public void go() {
