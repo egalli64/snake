@@ -13,10 +13,14 @@ public class TextualView {
     }
 
     public boolean go() {
-        System.out.print("Enter when ready > ");
         try(Scanner scanner = new Scanner(System.in)) {
-            String input = scanner.nextLine();
-            Logger.trace(input);
+            Command command;
+            do {
+                System.out.print("Your direction [L,R,U,D] (or, exit [X] / no change): ");
+                String input = scanner.nextLine().toLowerCase();
+                command = Command.byShortcut(input.isEmpty() ? ' ' : input.charAt(0));
+                Logger.trace(command);
+            } while(command != Command.EXIT);
         }
 
         return true;
