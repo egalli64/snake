@@ -1,7 +1,8 @@
 package com.example.snake;
 
 import com.example.snake.ctrl.Controller;
-import com.example.snake.view.Skin;
+import com.example.snake.view.BareView;
+import com.example.snake.view.View;
 import org.tinylog.Logger;
 
 /**
@@ -12,7 +13,8 @@ public class Main {
 
     public static void main(String[] args) {
         Logger.trace("Enter");
-        Controller controller = new Controller(DEFAULT_SIZE, Skin.CLI);
+        View view = new BareView();
+        Controller controller = new Controller(DEFAULT_SIZE, view);
         controller.go();
         Logger.trace("Done");
     }

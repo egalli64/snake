@@ -10,14 +10,8 @@ import java.util.Scanner;
  * A bare to the bone view for Snake
  */
 public class BareView implements View {
-    private Controller controller;
-
-    public BareView(Controller controller) {
-        this.controller = controller;
-    }
-
     @Override
-    public void go() {
+    public void go(Controller controller) {
         try (Scanner scanner = new Scanner(System.in)) {
             Command command;
             do {

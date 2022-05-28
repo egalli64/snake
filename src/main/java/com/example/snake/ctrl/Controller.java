@@ -4,8 +4,6 @@ import com.example.snake.model.Board;
 import com.example.snake.model.Direction;
 import com.example.snake.model.Position;
 import com.example.snake.model.Snake;
-import com.example.snake.view.BareView;
-import com.example.snake.view.Skin;
 import com.example.snake.view.View;
 import org.tinylog.Logger;
 
@@ -24,14 +22,11 @@ public class Controller {
      * The snake size is based on the board size
      *
      * @param size number of rows / columns
-     * @param skin the kind view to be used
+     * @param view the associated view
      */
-    public Controller(int size, Skin skin) {
+    public Controller(int size, View view) {
         this.board = new Board(size);
-        this.view = switch (skin) {
-            case CLI -> new BareView(this);
-            default -> throw new IllegalStateException("Unsupported skin");
-        };
+        this.view = view;
 
         Position head = board.pop();
         this.snake = new Snake(head, size / 2);
@@ -78,6 +73,6 @@ public class Controller {
      * Start the game
      */
     public void go() {
-        view.go();
+        view.go(this);
     }
 }
