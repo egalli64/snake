@@ -1,18 +1,20 @@
 package com.example.snake.model;
 
+import com.example.snake.ctrl.Command;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Data {
+public class Board {
     private final int N_ROWS;
     private final int N_COLS;
 
     private Set<Position> availables;
     private Snake snake;
 
-    public Data(int n_rows, int n_cols) {
+    public Board(int n_rows, int n_cols) {
         N_ROWS = n_rows;
         N_COLS = n_cols;
 
@@ -56,5 +58,9 @@ public class Data {
     @Override
     public String toString() {
         return "Data [" + snake + "]";
+    }
+
+    public boolean nextStep(Command command) {
+        return true;
     }
 }
