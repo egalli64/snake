@@ -10,18 +10,22 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Snake {
     private final Deque<Position> body;
     private Direction direction;
-    private final int size;
 
-    public Snake(Position head, int size) {
+    public Snake(Position head) {
         this.body = new ArrayDeque<>(0);
         this.body.add(head);
 
         // random direction
         Direction[] directions = Direction.values();
         this.direction = directions[ThreadLocalRandom.current().nextInt(directions.length)];
-        this.size = size;
     }
 
+    /**
+     * @return The current snake size
+     */
+    public int size() {
+        return body.size();
+    }
     /**
      * Let access to the snake head
      *
@@ -29,15 +33,6 @@ public class Snake {
      */
     public Position getHead() {
         return body.getFirst();
-    }
-
-    /**
-     * When the snake eats, then has to grow
-     *
-     * @return true if the snake is underdeveloped
-     */
-    public boolean hasToGrow() {
-        return body.size() < size;
     }
 
     /**
@@ -72,6 +67,12 @@ public class Snake {
         return this.direction;
     }
 
+    /**
+     * Move the snake, adding a new head and removing the previous tail
+     *
+     * @param head the new snake head
+     * @return the previous tail
+     */
     public Position move(Position head) {
         grow(head);
         return body.removeLast();
@@ -79,6 +80,6 @@ public class Snake {
 
     @Override
     public String toString() {
-        return "Snake{ body=" + body + ", direction=" + direction + ", size=" + size + '}';
+        return "Snake{ body=" + body + ", direction=" + direction + '}';
     }
 }

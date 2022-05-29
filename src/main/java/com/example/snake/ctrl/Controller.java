@@ -28,20 +28,21 @@ public class Controller {
         this.board = new Board(size);
         this.view = view;
 
-        Position head = board.pop();
-        this.snake = new Snake(head, size / 2);
+        Position head = board.randomPop();
+        this.snake = new Snake(head);
 
-        while (snake.hasToGrow()) {
+        while (snake.size() < size / 2) {
             Optional<Position> next = board.pop(head, snake.getDirection());
             if (next.isPresent()) {
                 head = next.get();
                 snake.grow(head);
             } else {
-                Logger.error("Can't move " + snake);
+                Logger.error("Can't grow " + snake);
             }
         }
 
         Logger.trace(snake);
+        Logger.trace("Food: " + board.getFood());
     }
 
     /**
@@ -64,10 +65,18 @@ public class Controller {
         if (next.isEmpty()) {
             return false;
         } else {
-            snake.move(next.get());
+            Position pos = next.get();
+            if(pos == board.getFood()) {
+                Logger.debug("Food eaten @" + pos);
+                board.resetFood();
+                snake.grow(pos);
+            } else {
+                board.push(snake.move(pos));
+            }
         }
 
         Logger.trace(snake);
+        Logger.trace("Food: " + board.getFood());
         return true;
     }
 

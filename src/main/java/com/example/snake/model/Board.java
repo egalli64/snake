@@ -12,7 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Board {
     private final int size;
 
-    private Set<Position> positions;
+    private final Set<Position> positions;
+    private Position food;
 
     public Board(int size) {
         this.size = size;
@@ -24,6 +25,22 @@ public class Board {
                 positions.add(new Position(i, j));
             }
         }
+
+        this.food = randomGet();
+    }
+
+    /**
+     * @return the current food position
+     */
+    public Position getFood() {
+        return food;
+    }
+
+    /**
+     * Pick a new food position
+     */
+    public void resetFood() {
+        this.food = randomGet();
     }
 
     @Override
@@ -34,23 +51,35 @@ public class Board {
     /**
      * Remove a random position among the available ones and return it
      *
-     * @return a not yet used random position in the board
+     * @return a no-snake random position in the board
      */
-    public Position pop() {
-        Iterator<Position> it = positions.iterator();
-        for (int i = 0, j = ThreadLocalRandom.current().nextInt(positions.size() - 1); i < j; i++) {
-            it.next();
+    public Position randomPop() {
+        Position result = randomGet();
+        if(result == food) {
+            food = randomGet();
         }
-
-        Position result = it.next();
         positions.remove(result);
         return result;
     }
 
     /**
+     * A random position among the available ones
+     *
+     * @return a no-snake random position in the board
+     */
+    private Position randomGet() {
+        Iterator<Position> it = positions.iterator();
+        for (int i = 0, j = ThreadLocalRandom.current().nextInt(positions.size() - 1); i < j; i++) {
+            it.next();
+        }
+
+        return it.next();
+    }
+
+    /**
      * Remove the specified position from the available ones and return it
      *
-     * @param position a position
+     * @param position  a position
      * @param direction where to get the result from the passed position
      * @return a good position or empty
      */
@@ -66,5 +95,14 @@ public class Board {
 
         Position result = new Position(i, j);
         return positions.remove(result) ? Optional.of(result) : Optional.empty();
+    }
+
+    /**
+     * Add a position to the collection of the available ones
+     *
+     * @param pos the freed position
+     */
+    public void push(Position pos) {
+        positions.add(pos);
     }
 }
