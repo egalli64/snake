@@ -58,7 +58,7 @@ public class Controller {
         }
 
         Direction direction = command == Command.SAME ? snake.getDirection() : snake.towards(Direction.from(command));
-        Logger.trace("Direction: " + direction);
+        Logger.trace("Command: " + command + ", direction: " + direction);
         Position head = snake.getHead();
 
         Optional<Position> next = board.pop(head, direction);
@@ -66,7 +66,7 @@ public class Controller {
             return false;
         } else {
             Position pos = next.get();
-            if(pos == board.getFood()) {
+            if(pos.equals(board.getFood())) {
                 Logger.debug("Food eaten @" + pos);
                 board.resetFood();
                 snake.grow(pos);

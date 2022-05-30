@@ -1,5 +1,7 @@
 package com.example.snake.model;
 
+import org.tinylog.Logger;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.concurrent.ThreadLocalRandom;
@@ -42,6 +44,7 @@ public class Snake {
      */
     public void grow(Position head) {
         body.addFirst(head);
+        Logger.trace("Now snake size is " + body.size());
     }
 
     /**
