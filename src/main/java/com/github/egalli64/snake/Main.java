@@ -24,7 +24,8 @@ public class Main {
             case SWING -> new SwingView(DEFAULT_SIZE);
         };
         Controller controller = new Controller(DEFAULT_SIZE, view);
-        controller.go();
+
+        view.go(controller);
         Logger.trace("Done");
     }
 }

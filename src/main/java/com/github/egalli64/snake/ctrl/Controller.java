@@ -41,7 +41,7 @@ public class Controller {
             }
         }
 
-        Logger.trace(snake);
+        Logger.trace("Snake: head " + snake.getHead() + ", direction " + snake.getDirection());
         Logger.trace("Food: " + board.getFood());
     }
 
@@ -75,15 +75,8 @@ public class Controller {
             }
         }
 
-        Logger.trace(snake);
+        Logger.trace("Snake: head " + snake.getHead() + ", direction " + snake.getDirection());
         Logger.trace("Food: " + board.getFood());
         return true;
-    }
-
-    /**
-     * Start the game
-     */
-    public void go() {
-        view.go(this);
     }
 }
