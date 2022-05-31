@@ -13,9 +13,16 @@ public class Main {
     private static final int DEFAULT_SIZE = 10;
 
     public static void main(String[] args) {
-        Logger.trace("Enter");
-        View view = new BareView();
-//        View view = new SwingView(DEFAULT_SIZE);
+        Mode mode = Mode.PLAIN;
+        if (args.length > 0 && args[0].equalsIgnoreCase("SWING")) {
+            mode = Mode.SWING;
+        }
+
+        Logger.trace("Enter, mode " + mode);
+        View view = switch (mode) {
+            case PLAIN -> new BareView();
+            case SWING -> new SwingView(DEFAULT_SIZE);
+        };
         Controller controller = new Controller(DEFAULT_SIZE, view);
         controller.go();
         Logger.trace("Done");

@@ -7,7 +7,7 @@ import org.tinylog.Logger;
 import java.util.Scanner;
 
 /**
- * A bare to the bone view for Snake
+ * A bare-bones view for Snake
  */
 public class BareView implements View {
     @Override
