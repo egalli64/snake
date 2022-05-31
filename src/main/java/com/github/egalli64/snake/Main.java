@@ -23,9 +23,18 @@ public class Main {
             case PLAIN -> new BareView();
             case SWING -> new SwingView(DEFAULT_SIZE);
         };
+
         Controller controller = new Controller(DEFAULT_SIZE, view);
+        Thread t = new Thread(controller);
+        t.start();
 
         view.go(controller);
-        Logger.trace("Done");
+
+        try {
+            t.join();
+            Logger.trace("Done");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

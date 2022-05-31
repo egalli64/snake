@@ -28,14 +28,21 @@ public class Snake {
     public int size() {
         return body.size();
     }
+
     /**
-     * Let access to the snake head
-     *
      * @return the snake head
      */
     public Position getHead() {
         return body.getFirst();
     }
+
+    /**
+     * @return the snake tail
+     */
+    public Position getTail() {
+        return body.getLast();
+    }
+
 
     /**
      * Let the snake grow
@@ -44,7 +51,7 @@ public class Snake {
      */
     public void grow(Position head) {
         body.addFirst(head);
-        Logger.trace("Now snake size is " + body.size());
+        Logger.trace("Snake head " + head + ", size " + body.size());
     }
 
     /**
@@ -77,8 +84,9 @@ public class Snake {
      * @return the previous tail
      */
     public Position move(Position head) {
+        Position freed = body.removeLast();
         grow(head);
-        return body.removeLast();
+        return freed;
     }
 
     @Override

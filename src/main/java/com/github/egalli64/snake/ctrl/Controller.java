@@ -8,24 +8,30 @@ import com.github.egalli64.snake.view.View;
 import org.tinylog.Logger;
 
 import java.util.Optional;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * The application controller
  */
-public class Controller {
+public class Controller implements Runnable {
     View view;
     Board board;
     Snake snake;
+    BlockingQueue<Command> commands;
+    BlockingQueue<Response> responses;
 
     /**
      * The (squared) board dimension is up to the caller
-     * The snake size is based on the board size
+     * The snake size is half the board size
      *
      * @param size number of rows / columns
      * @param view the associated view
      */
     public Controller(int size, View view) {
         this.board = new Board(size);
+        this.commands = new ArrayBlockingQueue<>(10);
+        this.responses = new ArrayBlockingQueue<>(10);
         this.view = view;
 
         Position head = board.randomPop();
@@ -43,6 +49,42 @@ public class Controller {
 
         Logger.trace("Snake: head " + snake.getHead() + ", direction " + snake.getDirection());
         Logger.trace("Food: " + board.getFood());
+    }
+
+    public void put(Command command) {
+        try {
+            commands.put(command);
+        } catch (InterruptedException e) {
+            Logger.warn(e, command + " discarded");
+        }
+    }
+
+    public Response getResponse() {
+        try {
+            return responses.take();
+        } catch (InterruptedException e) {
+            Logger.warn(e, "Can't get response");
+            return new Response();
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            Command command;
+            do {
+                command = commands.take();
+            } while (execute(command));
+        } catch (InterruptedException e) {
+            Logger.warn(e, "Can't take command from queue");
+        }
+
+        try {
+            responses.put(new Response());
+        } catch (InterruptedException e) {
+            Logger.error(e, "Can't put terminal response to queue");
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -64,15 +106,26 @@ public class Controller {
         Optional<Position> next = board.pop(head, direction);
         if (next.isEmpty()) {
             return false;
+        }
+
+        Position pos = next.get();
+        Position tail = null;
+        Position food = null;
+        if (pos.equals(board.getFood())) {
+            Logger.debug("Food eaten @" + pos);
+            board.resetFood();
+            snake.grow(pos);
+            food = board.getFood();
         } else {
-            Position pos = next.get();
-            if(pos.equals(board.getFood())) {
-                Logger.debug("Food eaten @" + pos);
-                board.resetFood();
-                snake.grow(pos);
-            } else {
-                board.push(snake.move(pos));
-            }
+            tail = snake.getTail();
+            board.push(snake.move(pos));
+        }
+
+        try {
+            responses.put(new Response(next, tail, food));
+        } catch (InterruptedException e) {
+            Logger.error(e, "Can't put response to queue");
+            throw new RuntimeException(e);
         }
 
         Logger.trace("Snake: head " + snake.getHead() + ", direction " + snake.getDirection());
