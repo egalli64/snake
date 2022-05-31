@@ -1,6 +1,6 @@
-package com.example.snake.view;
+package com.github.egalli64.snake.view;
 
-import com.example.snake.ctrl.Controller;
+import com.github.egalli64.snake.ctrl.Controller;
 
 /**
  * User Interface to Snake

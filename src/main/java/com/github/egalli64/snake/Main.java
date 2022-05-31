@@ -1,8 +1,9 @@
-package com.example.snake;
+package com.github.egalli64.snake;
 
-import com.example.snake.ctrl.Controller;
-import com.example.snake.view.BareView;
-import com.example.snake.view.View;
+import com.github.egalli64.snake.ctrl.Controller;
+import com.github.egalli64.snake.view.BareView;
+import com.github.egalli64.snake.view.SwingView;
+import com.github.egalli64.snake.view.View;
 import org.tinylog.Logger;
 
 /**
@@ -14,6 +15,7 @@ public class Main {
     public static void main(String[] args) {
         Logger.trace("Enter");
         View view = new BareView();
+//        View view = new SwingView(DEFAULT_SIZE);
         Controller controller = new Controller(DEFAULT_SIZE, view);
         controller.go();
         Logger.trace("Done");

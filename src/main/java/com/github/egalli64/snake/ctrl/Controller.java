@@ -1,10 +1,10 @@
-package com.example.snake.ctrl;
+package com.github.egalli64.snake.ctrl;
 
-import com.example.snake.model.Board;
-import com.example.snake.model.Direction;
-import com.example.snake.model.Position;
-import com.example.snake.model.Snake;
-import com.example.snake.view.View;
+import com.github.egalli64.snake.model.Board;
+import com.github.egalli64.snake.model.Direction;
+import com.github.egalli64.snake.model.Position;
+import com.github.egalli64.snake.model.Snake;
+import com.github.egalli64.snake.view.View;
 import org.tinylog.Logger;
 
 import java.util.Optional;

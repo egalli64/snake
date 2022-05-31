@@ -1,4 +1,4 @@
-package com.example.snake.view;
+package com.github.egalli64.snake.view;
 
 import java.awt.Color;
 

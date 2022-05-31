@@ -1,6 +1,6 @@
-package com.example.snake.model;
+package com.github.egalli64.snake.model;
 
-import com.example.snake.ctrl.Command;
+import com.github.egalli64.snake.ctrl.Command;
 
 /**
  * The selectable directions

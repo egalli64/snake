@@ -1,4 +1,4 @@
-package com.example.snake.model;
+package com.github.egalli64.snake.model;
 
 import java.util.HashSet;
 import java.util.Iterator;

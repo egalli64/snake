@@ -1,4 +1,4 @@
-package com.example.snake.ctrl;
+package com.github.egalli64.snake.ctrl;
 
 /**
  * The game commands
