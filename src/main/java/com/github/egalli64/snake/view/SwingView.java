@@ -1,25 +1,33 @@
 package com.github.egalli64.snake.view;
 
+import com.github.egalli64.snake.ctrl.Command;
 import com.github.egalli64.snake.ctrl.Controller;
+import org.tinylog.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class SwingView extends JFrame implements View {
-    private final int size;
+    private Controller controller;
 
     public SwingView(int size) {
         super("Snake");
 
-        this.size = size;
-        setSize(30 * size, 30 * size);
+        add(new SwingPanel(size));
+        pack();
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setResizable(false);
+        setLocationRelativeTo(null);
 
-        getContentPane().setLayout(new GridLayout(size, size, 0, 0));
+        this.addKeyListener((SwingKeyListener) e -> {
+            Logger.trace("Key code: " + e.getKeyCode());
+            Command command = Command.byKey(e.getKeyCode());
+            controller.put(command);
+        });
     }
 
     @Override
     public void go(Controller controller) {
+        this.controller = controller;
     }
 }

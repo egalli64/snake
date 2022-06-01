@@ -13,9 +13,9 @@ public class Main {
     private static final int DEFAULT_SIZE = 10;
 
     public static void main(String[] args) {
-        Mode mode = Mode.PLAIN;
-        if (args.length > 0 && args[0].equalsIgnoreCase("SWING")) {
-            mode = Mode.SWING;
+        Mode mode = Mode.SWING;
+        if (args.length > 0 && args[0].equalsIgnoreCase("PLAIN")) {
+            mode = Mode.PLAIN;
         }
 
         Logger.trace("Enter, mode " + mode);
