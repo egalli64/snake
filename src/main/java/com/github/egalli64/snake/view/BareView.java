@@ -23,8 +23,15 @@ public class BareView implements View {
                 Command command = Command.byShortcut(input.isEmpty() ? ' ' : input.charAt(0));
                 controller.put(command);
                 response = controller.getResponse();
-                Logger.trace("Controller response " + response);
+                show(response);
             } while(response.good());
+        }
+    }
+
+    private void show(Response response) {
+        Logger.trace("Response " + response);
+        if(response.head() != null) {
+            System.out.println("Head: " + response.head() + " direction " + response.direction());
         }
     }
 }

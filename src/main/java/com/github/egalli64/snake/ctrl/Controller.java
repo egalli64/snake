@@ -94,42 +94,39 @@ public class Controller implements Runnable {
      * @return false if it leads to the game termination
      */
     public boolean execute(Command command) {
-        Logger.trace("Command: " + command);
         if (command == Command.EXIT) {
             return false;
         }
 
         Direction direction = command == Command.SAME ? snake.getDirection() : snake.towards(Direction.from(command));
         Logger.trace("Command: " + command + ", direction: " + direction);
-        Position head = snake.getHead();
 
-        Optional<Position> next = board.pop(head, direction);
+        Optional<Position> next = board.pop(snake.getHead(), direction);
         if (next.isEmpty()) {
             return false;
         }
 
-        Position pos = next.get();
+        Position head = next.get();
         Position tail = null;
         Position food = null;
-        if (pos.equals(board.getFood())) {
-            Logger.debug("Food eaten @" + pos);
+        if (head.equals(board.getFood())) {
+            Logger.debug("Food eaten @" + head);
             board.resetFood();
-            snake.grow(pos);
+            snake.grow(head);
             food = board.getFood();
         } else {
             tail = snake.getTail();
-            board.push(snake.move(pos));
+            board.push(snake.move(head));
         }
 
         try {
-            responses.put(new Response(next, tail, food));
+            responses.put(new Response(head, tail, food, direction));
         } catch (InterruptedException e) {
             Logger.error(e, "Can't put response to queue");
             throw new RuntimeException(e);
         }
 
-        Logger.trace("Snake: head " + snake.getHead() + ", direction " + snake.getDirection());
-        Logger.trace("Food: " + board.getFood());
+        Logger.trace("Snake: head " + head + ", direction " + direction + ". Food: " + board.getFood());
         return true;
     }
 }

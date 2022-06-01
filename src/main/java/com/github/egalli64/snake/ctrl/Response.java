@@ -1,8 +1,7 @@
 package com.github.egalli64.snake.ctrl;
 
+import com.github.egalli64.snake.model.Direction;
 import com.github.egalli64.snake.model.Position;
-
-import java.util.Optional;
 
 /**
  * Response from Controller
@@ -15,16 +14,20 @@ import java.util.Optional;
  * @param tail the new tail
  * @param food the new food
  */
-public record Response(Optional<Position> head, Optional<Position> tail, Optional<Position> food) {
-    public Response(Optional<Position> head, Position tail, Position food) {
-        this(head, Optional.ofNullable(tail), Optional.ofNullable(food));
-    }
-
+public record Response(Position head, Position tail, Position food, Direction direction) {
+    /**
+     * Generate an empty response as terminator
+     */
     public Response() {
-        this(Optional.empty(), Optional.empty(), Optional.empty());
+        this(null, null, null, null);
     }
 
+    /**
+     * Headless snake means game over
+     *
+     * @return true if the game is still on
+     */
     public boolean good() {
-        return head().isPresent();
+        return head != null;
     }
 }
