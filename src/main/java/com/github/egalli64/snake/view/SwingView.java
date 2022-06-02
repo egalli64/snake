@@ -9,14 +9,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SwingView extends JPanel implements View {
-    static final int SIZE = 500;
     static final int TILE_SIZE = 50;
 
     private Position food = null;
     private Position body = null;
 
     public SwingView(int size) {
-        setPreferredSize(new Dimension(SIZE, SIZE));
+        setPreferredSize(new Dimension(TILE_SIZE * size, TILE_SIZE * size));
     }
 
     @Override
