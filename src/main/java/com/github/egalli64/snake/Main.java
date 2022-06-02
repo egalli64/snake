@@ -13,18 +13,23 @@ public class Main {
     private static final int DEFAULT_SIZE = 10;
 
     public static void main(String[] args) {
-        Mode mode = Mode.SWING;
-        if (args.length > 0 && args[0].equalsIgnoreCase("PLAIN")) {
-            mode = Mode.PLAIN;
+        Mode mode = args.length > 0 && args[0].equalsIgnoreCase("PLAIN") ? Mode.PLAIN : Mode.SWING;
+        int size = DEFAULT_SIZE;
+        if (args.length > 1) {
+            try {
+                size = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                Logger.warn("Ignoring second program argument [" + args[1] + "]");
+            }
         }
 
         Logger.trace("Enter, mode " + mode);
         View view = switch (mode) {
-            case PLAIN -> new BareView();
-            case SWING -> new SwingView(DEFAULT_SIZE);
+            case PLAIN -> new BareView(size);
+            case SWING -> new SwingView(size);
         };
 
-        Controller controller = new Controller(DEFAULT_SIZE, view);
+        Controller controller = new Controller(size, view);
         Thread t = new Thread(controller);
         t.start();
 

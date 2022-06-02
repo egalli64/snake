@@ -2,6 +2,7 @@ package com.github.egalli64.snake.view;
 
 import com.github.egalli64.snake.ctrl.Command;
 import com.github.egalli64.snake.ctrl.Controller;
+import com.github.egalli64.snake.ctrl.Response;
 import org.tinylog.Logger;
 
 import javax.swing.*;
@@ -29,5 +30,10 @@ public class SwingView extends JFrame implements View {
     @Override
     public void go(Controller controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public void show(Response response) {
+        Logger.trace(response);
     }
 }

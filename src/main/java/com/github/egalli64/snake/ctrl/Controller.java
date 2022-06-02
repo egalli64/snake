@@ -19,7 +19,6 @@ public class Controller implements Runnable {
     Board board;
     Snake snake;
     BlockingQueue<Command> commands;
-    BlockingQueue<Response> responses;
 
     /**
      * The (squared) board dimension is up to the caller
@@ -31,17 +30,19 @@ public class Controller implements Runnable {
     public Controller(int size, View view) {
         this.board = new Board(size);
         this.commands = new ArrayBlockingQueue<>(10);
-        this.responses = new ArrayBlockingQueue<>(10);
         this.view = view;
 
         Position head = board.randomPop();
         this.snake = new Snake(head);
+        Direction direction = snake.getDirection();
+        view.show(new Response(head, null, board.getFood(), direction));
 
         while (snake.size() < size / 2) {
-            Optional<Position> next = board.pop(head, snake.getDirection());
+            Optional<Position> next = board.pop(head, direction);
             if (next.isPresent()) {
                 head = next.get();
                 snake.grow(head);
+                view.show(new Response(head, null, null, direction));
             } else {
                 Logger.error("Can't grow " + snake);
             }
@@ -51,6 +52,11 @@ public class Controller implements Runnable {
         Logger.trace("Food: " + board.getFood());
     }
 
+    /**
+     * Put the command in queue
+     *
+     * @param command a request to move the snake
+     */
     public void put(Command command) {
         try {
             commands.put(command);
@@ -59,15 +65,9 @@ public class Controller implements Runnable {
         }
     }
 
-    public Response getResponse() {
-        try {
-            return responses.take();
-        } catch (InterruptedException e) {
-            Logger.warn(e, "Can't get response");
-            return new Response();
-        }
-    }
-
+    /**
+     * Take a command from the queue and execute it, until the snake is alive
+     */
     @Override
     public void run() {
         try {
@@ -79,12 +79,8 @@ public class Controller implements Runnable {
             Logger.warn(e, "Can't take command from queue");
         }
 
-        try {
-            responses.put(new Response());
-        } catch (InterruptedException e) {
-            Logger.error(e, "Can't put terminal response to queue");
-            throw new RuntimeException(e);
-        }
+        // termination
+        view.show(new Response());
     }
 
     /**
@@ -119,14 +115,8 @@ public class Controller implements Runnable {
             board.push(snake.move(head));
         }
 
-        try {
-            responses.put(new Response(head, tail, food, direction));
-        } catch (InterruptedException e) {
-            Logger.error(e, "Can't put response to queue");
-            throw new RuntimeException(e);
-        }
-
-        Logger.trace("Snake: head " + head + ", direction " + direction + ". Food: " + board.getFood());
+        // signal the move to the view
+        view.show(new Response(head, tail, food, direction));
         return true;
     }
 }

@@ -11,10 +11,26 @@ import java.util.Scanner;
  * A bare-bones view for Snake
  */
 public class BareView implements View {
+    private boolean alive;
+
+    public BareView(int size) {
+        this.alive = true;
+        System.out.println("Snake lives in a square sized " + size);
+    }
+
+    synchronized boolean isAlive() {
+        try {
+            this.wait();
+            return alive;
+        } catch (InterruptedException e) {
+            Logger.warn(e);
+            return false;
+        }
+    }
+
     @Override
     public void go(Controller controller) {
         try (Scanner scanner = new Scanner(System.in)) {
-            Response response;
 
             do {
                 System.out.print("Your direction [l,r,u,d] (or, exit [x] / no change): ");
@@ -22,16 +38,19 @@ public class BareView implements View {
                 Logger.trace("User input: " + input);
                 Command command = Command.byShortcut(input.isEmpty() ? ' ' : input.charAt(0));
                 controller.put(command);
-                response = controller.getResponse();
-                show(response);
-            } while(response.good());
+            } while (isAlive());
         }
     }
 
-    private void show(Response response) {
-        Logger.trace("Response " + response);
-        if(response.head() != null) {
-            System.out.println("Head: " + response.head() + " direction " + response.direction());
+    public void show(Response response) {
+        Logger.trace(response);
+        if (response.good()) {
+            System.out.println("[Head: " + response.head() + " direction " + response.direction() + "]");
+        }
+
+        synchronized (this) {
+            alive = response.good();
+            this.notifyAll();
         }
     }
 }
