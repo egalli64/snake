@@ -1,33 +1,28 @@
 package com.github.egalli64.snake.ctrl;
 
-import com.github.egalli64.snake.model.Direction;
 import com.github.egalli64.snake.model.Position;
+import com.github.egalli64.snake.model.Snake;
 
 /**
- * Response from Controller
- * <p>
- * if the snake is alive, its head changes position
- * <p>
- * if it eats, its tail does not move and food changes position
+ * Info from the model
  *
- * @param head the new head
- * @param tail the new tail
- * @param food the new food
+ * @param snake its current layout
+ * @param food  the new food
  */
-public record Response(Position head, Position tail, Position food, Direction direction) {
+public record Response(Snake snake, Position food) {
     /**
      * Generate an empty response as terminator
      */
     public Response() {
-        this(null, null, null, null);
+        this(null, null);
     }
 
     /**
-     * Headless snake means game over
+     * No snake means game over
      *
      * @return true if the game is still on
      */
     public boolean good() {
-        return head != null;
+        return snake != null;
     }
 }

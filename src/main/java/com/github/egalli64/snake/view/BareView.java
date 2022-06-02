@@ -66,7 +66,7 @@ public class BareView implements View {
     public void show(Response response) {
         Logger.trace(response);
         if (response.good()) {
-            System.out.println("[Head: " + response.head() + " direction " + response.direction() + "]");
+            System.out.println("Snake head: " + response.snake().getHead());
         }
 
         synchronized (this) {

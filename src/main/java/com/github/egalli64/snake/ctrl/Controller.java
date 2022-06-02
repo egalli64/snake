@@ -35,21 +35,18 @@ public class Controller implements Runnable {
         Position head = board.randomPop();
         this.snake = new Snake(head);
         Direction direction = snake.getDirection();
-        view.show(new Response(head, null, board.getFood(), direction));
 
         while (snake.size() < size / 2) {
             Optional<Position> next = board.pop(head, direction);
             if (next.isPresent()) {
                 head = next.get();
                 snake.grow(head);
-                view.show(new Response(head, null, null, direction));
             } else {
                 Logger.error("Can't grow " + snake);
             }
         }
-
-        Logger.trace("Snake: head " + snake.getHead() + ", direction " + snake.getDirection());
-        Logger.trace("Food: " + board.getFood());
+        view.show(new Response(snake, board.getFood()));
+        Logger.trace("The starting snake: " + snake);
     }
 
     /**
@@ -103,7 +100,6 @@ public class Controller implements Runnable {
         }
 
         Position head = next.get();
-        Position tail = null;
         Position food = null;
         if (head.equals(board.getFood())) {
             Logger.debug("Food eaten @" + head);
@@ -111,12 +107,11 @@ public class Controller implements Runnable {
             snake.grow(head);
             food = board.getFood();
         } else {
-            tail = snake.getTail();
             board.push(snake.move(head));
         }
 
-        // signal the move to the view
-        view.show(new Response(head, tail, food, direction));
+        // signal the new status to the view
+        view.show(new Response(snake, food));
         return true;
     }
 }

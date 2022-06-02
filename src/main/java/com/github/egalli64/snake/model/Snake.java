@@ -4,6 +4,7 @@ import org.tinylog.Logger;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -37,10 +38,10 @@ public class Snake {
     }
 
     /**
-     * @return the snake tail
+     * @return a body snake iterator
      */
-    public Position getTail() {
-        return body.getLast();
+    public Iterator<Position> iterator() {
+        return body.iterator();
     }
 
 
