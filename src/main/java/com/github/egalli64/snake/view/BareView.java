@@ -11,6 +11,9 @@ import java.util.Scanner;
  * A bare-bones view for Snake
  */
 public class BareView implements View {
+    /**
+     * view is alive until the controller sends a terminator
+     */
     private boolean alive;
 
     public BareView(int size) {
@@ -18,6 +21,11 @@ public class BareView implements View {
         System.out.println("Snake lives in a square sized " + size);
     }
 
+    /**
+     * Wait a response from the controller
+     *
+     * @return when alive is refreshed concurrently
+     */
     synchronized boolean isAlive() {
         try {
             this.wait();
@@ -28,6 +36,11 @@ public class BareView implements View {
         }
     }
 
+    /**
+     * Let the user interact with the game from CLI
+     *
+     * @param controller Snake controller
+     */
     @Override
     public void go(Controller controller) {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -42,6 +55,14 @@ public class BareView implements View {
         }
     }
 
+    /**
+     * This view acts in synchrony with the controller
+     * <p>
+     * When the controller invokes this method, the user sees the changes, and then should enter a new command
+     *
+     * @param response change in the model
+     */
+    @Override
     public void show(Response response) {
         Logger.trace(response);
         if (response.good()) {
