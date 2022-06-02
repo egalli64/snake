@@ -10,20 +10,31 @@ import org.tinylog.Logger;
  * Snake entry point
  */
 public class Main {
-    private static final int DEFAULT_SIZE = 10;
+    private static final int MIN_SIZE = 10;
+    private static final int MAX_SIZE = 30;
 
+    /**
+     * By default, swing MIN_SIZE board
+     *
+     * @param args mode (plain/swing), board size
+     */
     public static void main(String[] args) {
         Mode mode = args.length > 0 && args[0].equalsIgnoreCase("PLAIN") ? Mode.PLAIN : Mode.SWING;
-        int size = DEFAULT_SIZE;
+        int size = MIN_SIZE;
         if (args.length > 1) {
             try {
-                size = Integer.parseInt(args[1]);
+                int candidate = Integer.parseInt(args[1]);
+                if(candidate < MIN_SIZE || candidate > MAX_SIZE) {
+                    System.out.printf("Size should be in [%d..%d]", MIN_SIZE, MAX_SIZE);
+                    return;
+                }
+                size = candidate;
             } catch (NumberFormatException e) {
                 Logger.warn("Ignoring second program argument [" + args[1] + "]");
             }
         }
 
-        Logger.trace("Enter, mode " + mode);
+        Logger.trace("Enter in " + mode + " mode and board size " + size);
         View view = switch (mode) {
             case PLAIN -> new BareView(size);
             case SWING -> new SwingView(size);
