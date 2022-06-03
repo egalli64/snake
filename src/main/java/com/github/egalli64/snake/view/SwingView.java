@@ -26,17 +26,19 @@ public class SwingView extends JPanel implements View {
         super.paintComponent(g);
 
         if (food != null) {
-            g.setColor(Color.red);
+            g.setColor(Id.FOOD.color());
             g.fillOval(food.j() * TILE_SIZE, food.i() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         }
 
         if (snake != null) {
-            g.setColor(Color.blue);
             Iterator<Position> it = snake.iterator();
-            while (it.hasNext()) {
+
+            g.setColor(Id.HEAD.color());
+            do {
                 Position cur = it.next();
                 g.fillRect(cur.j() * TILE_SIZE, cur.i() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            }
+                g.setColor(Id.BODY.color());
+            } while (it.hasNext());
         }
     }
 
