@@ -2,9 +2,12 @@ package com.github.egalli64.snake;
 
 import com.github.egalli64.snake.ctrl.Controller;
 import com.github.egalli64.snake.view.BareView;
+import com.github.egalli64.snake.view.SwingFrame;
 import com.github.egalli64.snake.view.SwingView;
 import com.github.egalli64.snake.view.View;
 import org.tinylog.Logger;
+
+import java.awt.*;
 
 /**
  * Snake entry point
@@ -37,20 +40,15 @@ public class Main {
         Logger.trace("Enter in " + mode + " mode and board size " + size);
         View view = switch (mode) {
             case PLAIN -> new BareView(size);
-            case SWING -> new SwingView(size);
+            case SWING -> {
+                SwingView swing = new SwingView(size);
+                EventQueue.invokeLater(() -> new SwingFrame(swing));
+                yield swing;
+            }
         };
 
         Controller controller = new Controller(size, view);
-        Thread t = new Thread(controller);
-        t.start();
-
+        new Thread(controller).start();
         view.go(controller);
-
-        try {
-            t.join();
-            Logger.trace("Done");
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

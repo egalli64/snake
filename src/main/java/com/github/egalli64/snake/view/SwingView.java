@@ -16,7 +16,9 @@ import java.util.Iterator;
 public class SwingView extends JPanel implements View, ActionListener {
     static final int DELAY_MS = 500;
     static final int TILE_SIZE = 50;
+
     private final Timer timer;
+    private final SwingKeyListener keyListener;
     private Controller controller = null;
     private Position food = null;
     private Snake snake = null;
@@ -27,11 +29,13 @@ public class SwingView extends JPanel implements View, ActionListener {
         setPreferredSize(new Dimension(TILE_SIZE * size, TILE_SIZE * size));
         setFocusable(true);
 
-        this.addKeyListener((SwingKeyListener) e -> {
+        this.keyListener = e -> {
             Logger.trace("Key code: " + e.getKeyCode());
             Command command = Command.byKey(e.getKeyCode());
             controller.put(command);
-        });
+        };
+
+        this.addKeyListener(keyListener);
 
         timer.start();
     }
@@ -61,7 +65,6 @@ public class SwingView extends JPanel implements View, ActionListener {
     @Override
     public void go(Controller controller) {
         this.controller = controller;
-        new SwingFrame(this);
     }
 
     @Override
@@ -74,6 +77,7 @@ public class SwingView extends JPanel implements View, ActionListener {
             snake = response.snake();
         } else {
             timer.stop();
+            removeKeyListener(keyListener);
         }
         repaint();
     }
