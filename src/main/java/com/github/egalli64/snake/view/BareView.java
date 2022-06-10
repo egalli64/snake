@@ -5,7 +5,7 @@ import com.github.egalli64.snake.ctrl.Controller;
 import com.github.egalli64.snake.ctrl.Response;
 import org.tinylog.Logger;
 
-import java.util.Scanner;
+//import java.util.Scanner;
 
 /**
  * A bare-bones view for Snake
@@ -43,16 +43,19 @@ public class BareView implements View {
      */
     @Override
     public void go(Controller controller) {
-        try (Scanner scanner = new Scanner(System.in)) {
-
-            do {
+//         try (Scanner scanner = new Scanner(System.in)) {
+            // this block should be a do-while loop
+            if(isAlive()) {
                 System.out.print("Your direction [l,r,u,d] (or, exit [x] / no change): ");
-                String input = scanner.nextLine().toLowerCase();
+                String input = "x"; // scanner.nextLine().toLowerCase();
                 Logger.trace("User input: " + input);
-                Command command = Command.byShortcut(input.isEmpty() ? ' ' : input.charAt(0));
+//                Command command = Command.byShortcut(input.isEmpty() ? ' ' : input.charAt(0));
+                Command command = Command.byShortcut(input.charAt(0));
                 controller.put(command);
-            } while (isAlive());
-        }
+            }
+//         }
+
+        System.out.println("\nSorry CLI view disabled, maybe to be replaced with some kind of curses library?");
     }
 
     /**
