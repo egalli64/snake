@@ -8,6 +8,8 @@ import com.github.egalli64.snake.view.View;
 import org.tinylog.Logger;
 
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -15,9 +17,12 @@ import java.util.concurrent.BlockingQueue;
  * The application controller
  */
 public class Controller implements Runnable {
+    static final int PERIOD_MS = 500;
+
     View view;
     Board board;
     Snake snake;
+    Timer timer;
     BlockingQueue<Command> commands;
 
     /**
@@ -47,6 +52,9 @@ public class Controller implements Runnable {
         }
         view.show(new Response(snake, board.getFood()));
         Logger.trace("The starting snake: " + snake);
+
+        timer = new Timer();
+        timer.schedule(new Commander(), 0, PERIOD_MS);
     }
 
     /**
@@ -77,6 +85,8 @@ public class Controller implements Runnable {
         }
 
         // termination
+        timer.cancel();
+        commands.clear();
         view.show(new Response());
     }
 
@@ -113,5 +123,12 @@ public class Controller implements Runnable {
         // signal the new status to the view
         view.show(new Response(snake, food));
         return true;
+    }
+
+    class Commander extends TimerTask {
+        @Override
+        public void run() {
+            put(Command.SAME);
+        }
     }
 }

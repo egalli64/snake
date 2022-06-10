@@ -9,23 +9,17 @@ import org.tinylog.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Iterator;
 
-public class SwingView extends JPanel implements View, ActionListener {
-    static final int DELAY_MS = 500;
+public class SwingView extends JPanel implements View {
     static final int TILE_SIZE = 50;
 
-    private final Timer timer;
     private final SwingKeyListener keyListener;
     private Controller controller = null;
     private Position food = null;
     private Snake snake = null;
 
     public SwingView(int size) {
-        this.timer = new Timer(DELAY_MS, this);
-
         setPreferredSize(new Dimension(TILE_SIZE * size, TILE_SIZE * size));
         setFocusable(true);
 
@@ -36,8 +30,6 @@ public class SwingView extends JPanel implements View, ActionListener {
         };
 
         this.addKeyListener(keyListener);
-
-        timer.start();
     }
 
     @Override
@@ -76,14 +68,8 @@ public class SwingView extends JPanel implements View, ActionListener {
         if (response.snake() != null) {
             snake = response.snake();
         } else {
-            timer.stop();
             removeKeyListener(keyListener);
         }
         repaint();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        controller.put(Command.SAME);
     }
 }
