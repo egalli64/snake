@@ -1,25 +1,27 @@
-package com.github.egalli64.snake.view;
+package com.github.egalli64.snake.view.swing;
 
 import com.github.egalli64.snake.ctrl.Command;
 import com.github.egalli64.snake.ctrl.Controller;
 import com.github.egalli64.snake.ctrl.Response;
 import com.github.egalli64.snake.model.Position;
 import com.github.egalli64.snake.model.Snake;
+import com.github.egalli64.snake.view.Id;
+import com.github.egalli64.snake.view.View;
 import org.tinylog.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 
-public class SwingView extends JPanel implements View {
+public class SnakeView extends JPanel implements View {
     static final int TILE_SIZE = 50;
 
-    private final SwingKeyListener keyListener;
+    private final SnakeKeyListener keyListener;
     private Controller controller = null;
     private Position food = null;
     private Snake snake = null;
 
-    public SwingView(int size) {
+    public SnakeView(int size) {
         setPreferredSize(new Dimension(TILE_SIZE * size, TILE_SIZE * size));
         setFocusable(true);
 

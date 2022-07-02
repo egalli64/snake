@@ -1,9 +1,9 @@
-package com.github.egalli64.snake.view;
+package com.github.egalli64.snake.view.swing;
 
 import javax.swing.*;
 
-public class SwingFrame extends JFrame {
-    public SwingFrame(SwingView panel) {
+public class SnakeFrame extends JFrame {
+    public SnakeFrame(SnakeView panel) {
         super("Snake");
 
         add(panel);

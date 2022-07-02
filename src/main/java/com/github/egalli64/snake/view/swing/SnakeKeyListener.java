@@ -1,10 +1,9 @@
-package com.github.egalli64.snake.view;
+package com.github.egalli64.snake.view.swing;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 @FunctionalInterface
-public interface SwingKeyListener extends KeyListener {
+public interface SnakeKeyListener extends java.awt.event.KeyListener {
     @Override
     default void keyReleased(KeyEvent e) {
     }

@@ -1,10 +1,10 @@
 package com.github.egalli64.snake;
 
 import com.github.egalli64.snake.ctrl.Controller;
-import com.github.egalli64.snake.view.BareView;
-import com.github.egalli64.snake.view.SwingFrame;
-import com.github.egalli64.snake.view.SwingView;
 import com.github.egalli64.snake.view.View;
+import com.github.egalli64.snake.view.bare.BareView;
+import com.github.egalli64.snake.view.swing.SnakeFrame;
+import com.github.egalli64.snake.view.swing.SnakeView;
 import org.tinylog.Logger;
 
 import java.awt.*;
@@ -27,7 +27,7 @@ public class Main {
         if (args.length > 1) {
             try {
                 int candidate = Integer.parseInt(args[1]);
-                if(candidate < MIN_SIZE || candidate > MAX_SIZE) {
+                if (candidate < MIN_SIZE || candidate > MAX_SIZE) {
                     System.out.printf("Size should be in [%d..%d]", MIN_SIZE, MAX_SIZE);
                     return;
                 }
@@ -41,8 +41,8 @@ public class Main {
         View view = switch (mode) {
             case PLAIN -> new BareView(size);
             case SWING -> {
-                SwingView swing = new SwingView(size);
-                EventQueue.invokeLater(() -> new SwingFrame(swing));
+                SnakeView swing = new SnakeView(size);
+                EventQueue.invokeLater(() -> new SnakeFrame(swing));
                 yield swing;
             }
         };

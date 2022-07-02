@@ -1,8 +1,9 @@
-package com.github.egalli64.snake.view;
+package com.github.egalli64.snake.view.bare;
 
 import com.github.egalli64.snake.ctrl.Command;
 import com.github.egalli64.snake.ctrl.Controller;
 import com.github.egalli64.snake.ctrl.Response;
+import com.github.egalli64.snake.view.View;
 import org.tinylog.Logger;
 
 //import java.util.Scanner;
