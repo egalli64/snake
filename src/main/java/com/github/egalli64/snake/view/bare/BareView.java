@@ -45,15 +45,15 @@ public class BareView implements View {
     @Override
     public void go(Controller controller) {
 //         try (Scanner scanner = new Scanner(System.in)) {
-            // this block should be a do-while loop
-            if(isAlive()) {
-                System.out.print("Your direction [l,r,u,d] (or, exit [x] / no change): ");
-                String input = "x"; // scanner.nextLine().toLowerCase();
-                Logger.trace("User input: " + input);
+        // this block should be a do-while loop
+        if (isAlive()) {
+            System.out.print("Your direction [l,r,u,d] (or, exit [x] / no change): ");
+            String input = "x"; // scanner.nextLine().toLowerCase();
+            Logger.trace("User input: " + input);
 //                Command command = Command.byShortcut(input.isEmpty() ? ' ' : input.charAt(0));
-                Command command = Command.byShortcut(input.charAt(0));
-                controller.put(command);
-            }
+            Command command = Command.byShortcut(input.charAt(0));
+            controller.put(command);
+        }
 //         }
 
         System.out.println("\nSorry CLI view disabled, maybe to be replaced with some kind of curses library?");
@@ -70,7 +70,7 @@ public class BareView implements View {
     public void show(Response response) {
         Logger.trace(response);
         if (response.good()) {
-            System.out.println("Snake head: " + response.snake().getHead());
+            System.out.println("Position: " + response.position());
         }
 
         synchronized (this) {

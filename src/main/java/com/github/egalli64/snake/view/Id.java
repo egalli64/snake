@@ -6,7 +6,7 @@ import java.awt.Color;
  * Cell representation
  */
 public enum Id {
-    FOOD(Color.GREEN), BODY(Color.BLUE), HEAD(Color.YELLOW);
+    FOOD(Color.GREEN), BODY(Color.BLUE), HEAD(Color.YELLOW), EMPTY(Color.LIGHT_GRAY);
 
     private final Color color;
 

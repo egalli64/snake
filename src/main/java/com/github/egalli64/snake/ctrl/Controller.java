@@ -27,7 +27,7 @@ public class Controller implements Runnable {
 
     /**
      * The (squared) board dimension is up to the caller
-     * The snake size is half the board size
+     * The snake initial size is half the board size
      *
      * @param size number of rows / columns
      * @param view the associated view
@@ -36,25 +36,32 @@ public class Controller implements Runnable {
         this.board = new Board(size);
         this.commands = new ArrayBlockingQueue<>(10);
         this.view = view;
+        view.show(new Response(ResponseType.FOOD, board.getFood()));
 
         Position head = board.randomPop();
         this.snake = new Snake(head);
-        Direction direction = snake.getDirection();
+        view.show(new Response(ResponseType.HEAD, head));
 
+        Direction direction = snake.getDirection();
         while (snake.size() < size / 2) {
             Optional<Position> next = board.pop(head, direction);
             if (next.isPresent()) {
                 head = next.get();
                 snake.grow(head);
+                view.show(new Response(ResponseType.MOVE_HEAD, head));
             } else {
                 Logger.error("Can't grow " + snake);
             }
         }
-        view.show(new Response(snake, board.getFood()));
         Logger.trace("The starting snake: " + snake);
 
         timer = new Timer();
-        timer.schedule(new Commander(), 0, PERIOD_MS);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                put(Command.SAME);
+            }
+        }, 0, PERIOD_MS);
     }
 
     /**
@@ -91,10 +98,10 @@ public class Controller implements Runnable {
     }
 
     /**
-     * Run the command selected by the user
+     * Run the command selected by the user (or the default move)
      *
      * @param command the required command
-     * @return false if it leads to the game termination
+     * @return false if the execution leads to termination
      */
     public boolean execute(Command command) {
         if (command == Command.EXIT) {
@@ -110,25 +117,19 @@ public class Controller implements Runnable {
         }
 
         Position head = next.get();
-        Position food = null;
         if (head.equals(board.getFood())) {
             Logger.debug("Food eaten @" + head);
             board.resetFood();
+            view.show(new Response(ResponseType.FOOD, board.getFood()));
+
             snake.grow(head);
-            food = board.getFood();
         } else {
-            board.push(snake.move(head));
+            Position movedTail = snake.move(head);
+            board.push(movedTail);
+            view.show(new Response(ResponseType.MOVE_TAIL, movedTail));
         }
 
-        // signal the new status to the view
-        view.show(new Response(snake, food));
+        view.show(new Response(ResponseType.MOVE_HEAD, head));
         return true;
-    }
-
-    class Commander extends TimerTask {
-        @Override
-        public void run() {
-            put(Command.SAME);
-        }
     }
 }

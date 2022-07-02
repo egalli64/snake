@@ -1,28 +1,25 @@
 package com.github.egalli64.snake.ctrl;
 
 import com.github.egalli64.snake.model.Position;
-import com.github.egalli64.snake.model.Snake;
 
 /**
  * Info from the model
  *
- * @param snake its current layout
- * @param food  the new food
+ * @param type     kind of response
+ * @param position where on board
  */
-public record Response(Snake snake, Position food) {
+public record Response(ResponseType type, Position position) {
     /**
-     * Generate an empty response as terminator
+     * Generate a terminator
      */
     public Response() {
-        this(null, null);
+        this(ResponseType.TERMINATE, null);
     }
 
     /**
-     * No snake means game over
-     *
      * @return true if the game is still on
      */
     public boolean good() {
-        return snake != null;
+        return type != ResponseType.TERMINATE;
     }
 }
