@@ -1,12 +1,14 @@
 package com.github.egalli64.snake.view.swing;
 
 import com.github.egalli64.snake.view.Id;
-import org.tinylog.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Tile extends JPanel {
+    private static final Logger log = LoggerFactory.getLogger(Tile.class);
     private static final int SIZE = 50;
 
     private Id id;
@@ -20,7 +22,7 @@ public class Tile extends JPanel {
 
     public void setId(Id id) {
         this.id = id;
-        Logger.trace(String.format("Reset [%d,%d,%d]", id.color().getRed(), id.color().getGreen(), id.color().getBlue()));
+        log.trace(String.format("Reset [%d,%d,%d]", id.color().getRed(), id.color().getGreen(), id.color().getBlue()));
         repaint();
     }
 

@@ -6,14 +6,14 @@ import com.github.egalli64.snake.ctrl.Response;
 import com.github.egalli64.snake.model.Position;
 import com.github.egalli64.snake.view.Id;
 import com.github.egalli64.snake.view.View;
-import org.tinylog.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class SnakeView extends JPanel implements View {
-    static final int TILE_SIZE = 50;
-
+    private static final Logger log = LoggerFactory.getLogger(SnakeView.class);
     private final Tile[][] tiles;
     private final SnakeKeyListener keyListener;
     private Controller controller = null;
@@ -21,8 +21,8 @@ public class SnakeView extends JPanel implements View {
 
     public SnakeView(int size) {
         this.tiles = new Tile[size][size];
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 tiles[i][j] = new Tile();
                 add(tiles[i][j]);
             }
@@ -32,7 +32,7 @@ public class SnakeView extends JPanel implements View {
         setFocusable(true);
 
         this.keyListener = e -> {
-            Logger.trace("Key code: " + e.getKeyCode());
+            log.trace("Key code: " + e.getKeyCode());
             Command command = Command.byKey(e.getKeyCode());
             controller.put(command);
         };
@@ -47,7 +47,7 @@ public class SnakeView extends JPanel implements View {
 
     @Override
     public void show(Response response) {
-        Logger.trace(response);
+        log.trace(response.toString());
         switch (response.type()) {
             case FOOD -> {
                 Position pos = response.position();

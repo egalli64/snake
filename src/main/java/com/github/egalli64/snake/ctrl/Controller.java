@@ -5,7 +5,8 @@ import com.github.egalli64.snake.model.Direction;
 import com.github.egalli64.snake.model.Position;
 import com.github.egalli64.snake.model.Snake;
 import com.github.egalli64.snake.view.View;
-import org.tinylog.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.Timer;
@@ -18,7 +19,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class Controller implements Runnable {
     static final int PERIOD_MS = 500;
-
+    private static final Logger log = LoggerFactory.getLogger(Controller.class);
     View view;
     Board board;
     Snake snake;
@@ -50,10 +51,10 @@ public class Controller implements Runnable {
                 snake.grow(head);
                 view.show(new Response(ResponseType.MOVE_HEAD, head));
             } else {
-                Logger.error("Can't grow " + snake);
+                log.error("Can't grow {}", snake);
             }
         }
-        Logger.trace("The starting snake: " + snake);
+        log.trace("The starting snake: {}", snake);
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -73,7 +74,7 @@ public class Controller implements Runnable {
         try {
             commands.put(command);
         } catch (InterruptedException e) {
-            Logger.warn(e, command + " discarded");
+            log.warn(command + " discarded", e);
         }
     }
 
@@ -88,7 +89,7 @@ public class Controller implements Runnable {
                 command = commands.take();
             } while (execute(command));
         } catch (InterruptedException e) {
-            Logger.warn(e, "Can't take command from queue");
+            log.warn("Can't take command from queue", e);
         }
 
         // termination
@@ -109,7 +110,7 @@ public class Controller implements Runnable {
         }
 
         Direction direction = command == Command.SAME ? snake.getDirection() : snake.towards(Direction.from(command));
-        Logger.trace("Command: " + command + ", direction: " + direction);
+        log.trace("Command: {}, direction: {}", command, direction);
 
         Optional<Position> next = board.pop(snake.getHead(), direction);
         if (next.isEmpty()) {
@@ -118,7 +119,7 @@ public class Controller implements Runnable {
 
         Position head = next.get();
         if (head.equals(board.getFood())) {
-            Logger.debug("Food eaten @" + head);
+            log.debug("Food eaten @{}", head);
             board.resetFood();
             view.show(new Response(ResponseType.FOOD, board.getFood()));
 

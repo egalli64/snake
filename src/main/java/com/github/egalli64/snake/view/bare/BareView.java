@@ -4,7 +4,8 @@ import com.github.egalli64.snake.ctrl.Command;
 import com.github.egalli64.snake.ctrl.Controller;
 import com.github.egalli64.snake.ctrl.Response;
 import com.github.egalli64.snake.view.View;
-import org.tinylog.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //import java.util.Scanner;
 
@@ -12,6 +13,8 @@ import org.tinylog.Logger;
  * A bare-bones view for Snake
  */
 public class BareView implements View {
+    private static final Logger log = LoggerFactory.getLogger(BareView.class);
+
     /**
      * view is alive until the controller sends a terminator
      */
@@ -32,7 +35,7 @@ public class BareView implements View {
             this.wait();
             return alive;
         } catch (InterruptedException e) {
-            Logger.warn(e);
+            log.warn("Can't wait", e);
             return false;
         }
     }
@@ -49,7 +52,7 @@ public class BareView implements View {
         if (isAlive()) {
             System.out.print("Your direction [l,r,u,d] (or, exit [x] / no change): ");
             String input = "x"; // scanner.nextLine().toLowerCase();
-            Logger.trace("User input: " + input);
+            log.trace("User input: {}", input);
 //                Command command = Command.byShortcut(input.isEmpty() ? ' ' : input.charAt(0));
             Command command = Command.byShortcut(input.charAt(0));
             controller.put(command);
@@ -68,7 +71,7 @@ public class BareView implements View {
      */
     @Override
     public void show(Response response) {
-        Logger.trace(response);
+        log.trace(response.toString());
         if (response.good()) {
             System.out.println("Position: " + response.position());
         }

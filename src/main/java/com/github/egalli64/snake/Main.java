@@ -5,7 +5,8 @@ import com.github.egalli64.snake.view.View;
 import com.github.egalli64.snake.view.bare.BareView;
 import com.github.egalli64.snake.view.swing.SnakeFrame;
 import com.github.egalli64.snake.view.swing.SnakeView;
-import org.tinylog.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 
@@ -13,6 +14,7 @@ import java.awt.*;
  * Snake entry point
  */
 public class Main {
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
     private static final int MIN_SIZE = 10;
     private static final int MAX_SIZE = 30;
 
@@ -33,11 +35,11 @@ public class Main {
                 }
                 size = candidate;
             } catch (NumberFormatException e) {
-                Logger.warn("Ignoring second program argument [" + args[1] + "]");
+                log.warn("Ignoring second program argument [{}]", args[1]);
             }
         }
 
-        Logger.trace("Enter in " + mode + " mode and board size " + size);
+        log.trace("Enter in {} mode and board size {}", mode, size);
         View view = switch (mode) {
             case PLAIN -> new BareView(size);
             case SWING -> {

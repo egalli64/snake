@@ -1,6 +1,7 @@
 package com.github.egalli64.snake.model;
 
-import org.tinylog.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -10,6 +11,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * The game main character
  */
 public class Snake {
+    private static final Logger log = LoggerFactory.getLogger(Snake.class);
+
     private final Deque<Position> body;
     private Direction direction;
 
@@ -43,7 +46,7 @@ public class Snake {
      */
     public void grow(Position head) {
         body.addFirst(head);
-        Logger.trace("Snake head " + head + ", size " + body.size());
+        log.trace("Snake head {} size {}", head, body.size());
     }
 
     /**
