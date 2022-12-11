@@ -24,7 +24,7 @@ public class Main {
      * @param args mode (plain/swing), board size
      */
     public static void main(String[] args) {
-        Mode mode = args.length > 0 && args[0].equalsIgnoreCase("PLAIN") ? Mode.PLAIN : Mode.SWING;
+        Mode mode = args.length > 0 && args[0].equalsIgnoreCase(Mode.PLAIN.toString()) ? Mode.PLAIN : Mode.SWING;
         int size = MIN_SIZE;
         if (args.length > 1) {
             try {
