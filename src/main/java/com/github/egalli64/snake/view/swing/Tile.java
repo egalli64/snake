@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class Tile extends JPanel {
     private static final Logger log = LoggerFactory.getLogger(Tile.class);
     private static final int SIZE = 50;

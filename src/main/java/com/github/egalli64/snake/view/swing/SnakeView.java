@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class SnakeView extends JPanel implements View {
     private static final Logger log = LoggerFactory.getLogger(SnakeView.class);
     private final Tile[][] tiles;
